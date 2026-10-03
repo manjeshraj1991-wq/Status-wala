@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Status Wala",
+  "description": "Minimalist daily affirmations, status quotes customization, end-to-end encrypted journaling, offline meditations, and mood tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,226 @@
+import { QuoteCategory } from '../types';
+
+export interface CategoryStyle {
+  cardBg: string;
+  cardBorder: string;
+  hoverBorder: string;
+  badgeBg: string;
+  accentText: string;
+  auraGradient: string;
+  // Canvas export preset colors
+  canvasGradientLight: [string, string];
+  canvasGradientDark: [string, string];
+  textColorLight: string;
+  textColorDark: string;
+  accentColorLight: string;
+  accentColorDark: string;
+}
+
+export const CATEGORY_STYLES: Record<Exclude<QuoteCategory, 'all'>, CategoryStyle> = {
+  calm: {
+    cardBg: 'bg-emerald-50/70 dark:bg-emerald-950/25',
+    cardBorder: 'border-emerald-200/80 dark:border-emerald-800/40',
+    hoverBorder: 'hover:border-emerald-400 dark:hover:border-emerald-700',
+    badgeBg: 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60',
+    accentText: 'text-emerald-700 dark:text-emerald-300',
+    auraGradient: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#eef7f3', '#d9ece3'],
+    canvasGradientDark: ['#0d231b', '#16382b'],
+    textColorLight: '#132e24',
+    textColorDark: '#e3f3ec',
+    accentColorLight: '#2e755b',
+    accentColorDark: '#70b99c',
+  },
+  motivation: {
+    cardBg: 'bg-amber-50/70 dark:bg-amber-950/25',
+    cardBorder: 'border-amber-200/80 dark:border-amber-800/40',
+    hoverBorder: 'hover:border-amber-400 dark:hover:border-amber-700',
+    badgeBg: 'bg-amber-100/90 text-amber-900 dark:bg-amber-900/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60',
+    accentText: 'text-amber-700 dark:text-amber-300',
+    auraGradient: 'radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fff8ec', '#feeed3'],
+    canvasGradientDark: ['#281a08', '#3d280c'],
+    textColorLight: '#331e05',
+    textColorDark: '#faeed9',
+    accentColorLight: '#a16207',
+    accentColorDark: '#f59e0b',
+  },
+  healing: {
+    cardBg: 'bg-rose-50/70 dark:bg-rose-950/25',
+    cardBorder: 'border-rose-200/80 dark:border-rose-800/40',
+    hoverBorder: 'hover:border-rose-400 dark:hover:border-rose-700',
+    badgeBg: 'bg-rose-100/90 text-rose-900 dark:bg-rose-900/60 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/60',
+    accentText: 'text-rose-700 dark:text-rose-300',
+    auraGradient: 'radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fff0f3', '#ffe0e6'],
+    canvasGradientDark: ['#2a0d14', '#3d141e'],
+    textColorLight: '#380e18',
+    textColorDark: '#fce7ec',
+    accentColorLight: '#be123c',
+    accentColorDark: '#fb7185',
+  },
+  success: {
+    cardBg: 'bg-sky-50/70 dark:bg-sky-950/25',
+    cardBorder: 'border-sky-200/80 dark:border-sky-800/40',
+    hoverBorder: 'hover:border-sky-400 dark:hover:border-sky-700',
+    badgeBg: 'bg-sky-100/90 text-sky-900 dark:bg-sky-900/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/60',
+    accentText: 'text-sky-700 dark:text-sky-300',
+    auraGradient: 'radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#f0f9ff', '#e0f2fe'],
+    canvasGradientDark: ['#082032', '#0d324d'],
+    textColorLight: '#082f49',
+    textColorDark: '#e0f2fe',
+    accentColorLight: '#0284c7',
+    accentColorDark: '#38bdf8',
+  },
+  gratitude: {
+    cardBg: 'bg-orange-50/70 dark:bg-orange-950/25',
+    cardBorder: 'border-orange-200/80 dark:border-orange-800/40',
+    hoverBorder: 'hover:border-orange-400 dark:hover:border-orange-700',
+    badgeBg: 'bg-orange-100/90 text-orange-900 dark:bg-orange-900/60 dark:text-orange-300 border border-orange-200/60 dark:border-orange-800/60',
+    accentText: 'text-orange-700 dark:text-orange-300',
+    auraGradient: 'radial-gradient(circle, rgba(249, 115, 22, 0.22) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fff7ed', '#ffedd5'],
+    canvasGradientDark: ['#2e1507', '#421f0b'],
+    textColorLight: '#431407',
+    textColorDark: '#ffedd5',
+    accentColorLight: '#c2410c',
+    accentColorDark: '#fb923c',
+  },
+  wisdom: {
+    cardBg: 'bg-indigo-50/70 dark:bg-indigo-950/25',
+    cardBorder: 'border-indigo-200/80 dark:border-indigo-800/40',
+    hoverBorder: 'hover:border-indigo-400 dark:hover:border-indigo-700',
+    badgeBg: 'bg-indigo-100/90 text-indigo-900 dark:bg-indigo-900/60 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60',
+    accentText: 'text-indigo-700 dark:text-indigo-300',
+    auraGradient: 'radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#f5f5ff', '#ebebfe'],
+    canvasGradientDark: ['#121330', '#1c1e48'],
+    textColorLight: '#1e1b4b',
+    textColorDark: '#e0e7ff',
+    accentColorLight: '#4f46e5',
+    accentColorDark: '#818cf8',
+  },
+  courage: {
+    cardBg: 'bg-red-50/70 dark:bg-red-950/25',
+    cardBorder: 'border-red-200/80 dark:border-red-800/40',
+    hoverBorder: 'hover:border-red-400 dark:hover:border-red-700',
+    badgeBg: 'bg-red-100/90 text-red-900 dark:bg-red-900/60 dark:text-red-300 border border-red-200/60 dark:border-red-800/60',
+    accentText: 'text-red-700 dark:text-red-300',
+    auraGradient: 'radial-gradient(circle, rgba(239, 68, 68, 0.22) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fef2f2', '#fee2e2'],
+    canvasGradientDark: ['#28090a', '#3f1113'],
+    textColorLight: '#450a0a',
+    textColorDark: '#fee2e2',
+    accentColorLight: '#dc2626',
+    accentColorDark: '#f87171',
+  },
+  evening: {
+    cardBg: 'bg-purple-50/70 dark:bg-purple-950/25',
+    cardBorder: 'border-purple-200/80 dark:border-purple-800/40',
+    hoverBorder: 'hover:border-purple-400 dark:hover:border-purple-700',
+    badgeBg: 'bg-purple-100/90 text-purple-900 dark:bg-purple-900/60 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60',
+    accentText: 'text-purple-700 dark:text-purple-300',
+    auraGradient: 'radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#faf5ff', '#f3e8ff'],
+    canvasGradientDark: ['#1c0c29', '#2d1442'],
+    textColorLight: '#3b0764',
+    textColorDark: '#f3e8ff',
+    accentColorLight: '#9333ea',
+    accentColorDark: '#c084fc',
+  },
+  // NEW CATEGORY: LOVE / ISHQ / PYAAR (Romantic Ruby Velvet & Rose)
+  love: {
+    cardBg: 'bg-pink-50/80 dark:bg-pink-950/30',
+    cardBorder: 'border-pink-200/90 dark:border-pink-800/50',
+    hoverBorder: 'hover:border-pink-400 dark:hover:border-pink-600',
+    badgeBg: 'bg-pink-100/90 text-pink-900 dark:bg-pink-900/60 dark:text-pink-200 border border-pink-200/70 dark:border-pink-800/60',
+    accentText: 'text-pink-700 dark:text-pink-300',
+    auraGradient: 'radial-gradient(circle, rgba(236, 72, 153, 0.28) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fdf2f8', '#fce7f3'],
+    canvasGradientDark: ['#380c20', '#501430'],
+    textColorLight: '#370518',
+    textColorDark: '#fdf2f8',
+    accentColorLight: '#db2777',
+    accentColorDark: '#f472b6',
+  },
+  // NEW CATEGORY: SAD / DARD / TANHAI (Midnight Rain, Muted Blue Slate)
+  sad: {
+    cardBg: 'bg-slate-100/70 dark:bg-slate-900/40',
+    cardBorder: 'border-slate-300/80 dark:border-slate-700/60',
+    hoverBorder: 'hover:border-slate-400 dark:hover:border-slate-600',
+    badgeBg: 'bg-slate-200/90 text-slate-800 dark:bg-slate-800/80 dark:text-slate-300 border border-slate-300/70 dark:border-slate-700/60',
+    accentText: 'text-slate-600 dark:text-slate-400',
+    auraGradient: 'radial-gradient(circle, rgba(100, 116, 139, 0.25) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#f8fafc', '#e2e8f0'],
+    canvasGradientDark: ['#0f172a', '#1e293b'],
+    textColorLight: '#1e293b',
+    textColorDark: '#f1f5f9',
+    accentColorLight: '#475569',
+    accentColorDark: '#94a3b8',
+  },
+  // NEW CATEGORY: FESTIVALS / TYOHAR / UTSAV (Radiant Festive Marigold & Diya Glow)
+  festivals: {
+    cardBg: 'bg-yellow-50/80 dark:bg-yellow-950/30',
+    cardBorder: 'border-yellow-300/80 dark:border-yellow-700/50',
+    hoverBorder: 'hover:border-yellow-500 dark:hover:border-yellow-500',
+    badgeBg: 'bg-yellow-100/90 text-yellow-900 dark:bg-yellow-900/60 dark:text-yellow-200 border border-yellow-300/70 dark:border-yellow-700/60',
+    accentText: 'text-amber-800 dark:text-amber-300',
+    auraGradient: 'radial-gradient(circle, rgba(234, 179, 8, 0.35) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fefce8', '#fef08a'],
+    canvasGradientDark: ['#2e2203', '#453305'],
+    textColorLight: '#422006',
+    textColorDark: '#fef9c3',
+    accentColorLight: '#ca8a04',
+    accentColorDark: '#facc15',
+  },
+  // NEW CATEGORY: ATTITUDE / TEVAR / SWAG (Royal Crimson Gold & Obsidian)
+  attitude: {
+    cardBg: 'bg-neutral-100/80 dark:bg-neutral-900/60',
+    cardBorder: 'border-neutral-300/80 dark:border-neutral-700/70',
+    hoverBorder: 'hover:border-neutral-500 dark:hover:border-neutral-400',
+    badgeBg: 'bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 border border-stone-800 dark:border-stone-200 font-bold',
+    accentText: 'text-stone-900 dark:text-stone-100',
+    auraGradient: 'radial-gradient(circle, rgba(50, 50, 50, 0.35) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#f5f5f4', '#e7e5e4'],
+    canvasGradientDark: ['#0c0a09', '#1c1917'],
+    textColorLight: '#0c0a09',
+    textColorDark: '#fafaf9',
+    accentColorLight: '#78716c',
+    accentColorDark: '#d6d3d1',
+  },
+  // NEW CATEGORY: FRIENDSHIP / DOSTI / YAARI (Warm Amber Sunshine)
+  friendship: {
+    cardBg: 'bg-teal-50/70 dark:bg-teal-950/25',
+    cardBorder: 'border-teal-200/80 dark:border-teal-800/40',
+    hoverBorder: 'hover:border-teal-400 dark:hover:border-teal-700',
+    badgeBg: 'bg-teal-100/90 text-teal-900 dark:bg-teal-900/60 dark:text-teal-200 border border-teal-200/60 dark:border-teal-800/60',
+    accentText: 'text-teal-700 dark:text-teal-300',
+    auraGradient: 'radial-gradient(circle, rgba(20, 184, 166, 0.25) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#f0fdfa', '#ccfbf1'],
+    canvasGradientDark: ['#042f2e', '#115e59'],
+    textColorLight: '#134e4a',
+    textColorDark: '#ccfbf1',
+    accentColorLight: '#0d9488',
+    accentColorDark: '#5eead4',
+  },
+  // NEW CATEGORY: DEVOTIONAL / BHAKTI / ARADHANA (Divine Ochre Saffron & Temple Diya Gold)
+  devotional: {
+    cardBg: 'bg-orange-50/85 dark:bg-amber-950/35',
+    cardBorder: 'border-amber-300/80 dark:border-amber-700/50',
+    hoverBorder: 'hover:border-orange-500 dark:hover:border-amber-500',
+    badgeBg: 'bg-amber-100 text-amber-900 dark:bg-amber-900/70 dark:text-amber-200 border border-amber-300/80 dark:border-amber-700/70 font-semibold',
+    accentText: 'text-amber-800 dark:text-amber-300',
+    auraGradient: 'radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(200, 200, 200, 0) 70%)',
+    canvasGradientLight: ['#fffbeb', '#fde68a'],
+    canvasGradientDark: ['#3b1c05', '#572709'],
+    textColorLight: '#451a03',
+    textColorDark: '#fef3c7',
+    accentColorLight: '#b45309',
+    accentColorDark: '#fbbf24',
+  },
+};
+
+export function getCategoryStyle(category: Exclude<QuoteCategory, 'all'>): CategoryStyle {
+  return CATEGORY_STYLES[category] || CATEGORY_STYLES.calm;
+}
