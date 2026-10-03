@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* src/index.css */
+@layer base {
+  :root {
+    --font-serif:
+      "Cormorant Garamond",
+      "Newsreader",
+      Georgia,
+      serif;
+    --font-editorial:
+      "Newsreader",
+      Georgia,
+      serif;
+    --font-sans:
+      "Plus Jakarta Sans",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+  }
+  body {
+    font-family: var(--font-sans);
+  }
+}
+.font-serif-cormorant {
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+}
+.font-serif-newsreader {
+  font-family:
+    "Newsreader",
+    Georgia,
+    serif;
+}
+.font-sans-modern {
+  font-family:
+    "Plus Jakarta Sans",
+    system-ui,
+    sans-serif;
+}
+.font-mono-clean {
+  font-family: "JetBrains Mono", monospace;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.45);
+}
+body.theme-light {
+  background-color: #faf9f5;
+  color: #1c1917;
+}
+body.theme-dark {
+  background-color: #121316;
+  color: #f3f4f6;
+}
+body.theme-sepia {
+  background-color: #f4ece1;
+  color: #2c251e;
+}
+body.theme-oled {
+  background-color: #000000;
+  color: #ededed;
+}
+@keyframes breatheAnimation {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.85;
+  }
+}
+.animate-breathe {
+  animation: breatheAnimation 19s ease-in-out infinite;
+}
