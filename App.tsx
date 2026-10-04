@@ -19,6 +19,8 @@ import {
   saveEncryptedJournal,
   saveMoodEntries,
   savePreferences,
+  loadApprovedCommunityQuotes,
+  loadCommunitySubmissions,
 } from './services/storage';
 import { t } from './i18n/translations';
 import { Header } from './components/Header';
@@ -33,7 +35,8 @@ import { CloudSyncModal } from './components/CloudSyncModal';
 import { NotificationSettingsModal } from './components/NotificationSettingsModal';
 import { SubscriptionModal } from './components/SubscriptionModal';
 import { MovieStatusView } from './components/MovieStatusView';
-import { DownloadProjectModal } from './components/DownloadProjectModal';
+import { SubmitQuoteModal } from './components/SubmitQuoteModal';
+import { AdminApprovalModal } from './components/AdminApprovalModal';
 import { deliverDailyNotification } from './services/notifications';
 
 export default function App() {
@@ -88,9 +91,23 @@ export default function App() {
   }, [preferences.theme]);
 
   // 5. Consolidated Quotes list
+  const [communityQuotes, setCommunityQuotes] = useState<Quote[]>(() =>
+    loadApprovedCommunityQuotes()
+  );
+  const [pendingCount, setPendingCount] = useState<number>(() => {
+    return loadCommunitySubmissions().filter((s) => s.status === 'pending').length;
+  });
+  const [isSubmitQuoteOpen, setIsSubmitQuoteOpen] = useState<boolean>(false);
+  const [isAdminApprovalOpen, setIsAdminApprovalOpen] = useState<boolean>(false);
+
+  const refreshCommunityData = () => {
+    setCommunityQuotes(loadApprovedCommunityQuotes());
+    setPendingCount(loadCommunitySubmissions().filter((s) => s.status === 'pending').length);
+  };
+
   const allQuotes = useMemo(() => {
-    return [...(preferences.customQuotes || []), ...INITIAL_QUOTES];
-  }, [preferences.customQuotes]);
+    return [...communityQuotes, ...(preferences.customQuotes || []), ...INITIAL_QUOTES];
+  }, [communityQuotes, preferences.customQuotes]);
 
   // 6. Selected Daily Affirmation
   const [heroQuote, setHeroQuote] = useState<Quote>(() => {
@@ -112,7 +129,6 @@ export default function App() {
   const [isSyncOpen, setIsSyncOpen] = useState<boolean>(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
   const [isSubscriptionOpen, setIsSubscriptionOpen] = useState<boolean>(false);
-  const [isDownloadOpen, setIsDownloadOpen] = useState<boolean>(false);
 
   // Current language
   const currentLang = preferences.language || 'hi';
@@ -219,6 +235,36 @@ export default function App() {
     });
   };
 
+  const [downloadSuccessMessage, setDownloadSuccessMessage] = useState<string | null>(null);
+
+  const handleDownloadDirect = async (filename: string) => {
+    try {
+      let url = '';
+      if (filename === 'mobile-deploy-pack.zip') {
+        url = '/mobile-deploy-pack.zip';
+      } else {
+        url = `/api/download-file?name=${encodeURIComponent(filename)}`;
+      }
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Download failed');
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      setDownloadSuccessMessage(`✅ ${filename} सफलतापूर्वक डाउनलोड हो गई!`);
+      setTimeout(() => setDownloadSuccessMessage(null), 3500);
+    } catch (err) {
+      console.error('Download error:', err);
+      // Fallback direct link
+      window.open(`/api/download-file?name=${encodeURIComponent(filename)}`, '_blank');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col font-sans transition-colors duration-200">
       {/* Top Header */}
@@ -236,34 +282,15 @@ export default function App() {
         onOpenSync={() => setIsSyncOpen(true)}
         onOpenSubscription={() => setIsSubscriptionOpen(true)}
         onOpenNotifications={() => setIsNotificationsOpen(true)}
-        onOpenDownloadCode={() => setIsDownloadOpen(true)}
+        onOpenSubmitQuote={() => setIsSubmitQuoteOpen(true)}
+        onOpenAdminPanel={() => setIsAdminApprovalOpen(true)}
+        onOpenEdit={() => handleOpenCustomizer(heroQuote)}
+        pendingSubmissionsCount={pendingCount}
         isOnline={isOnline}
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-        {/* Quick Code Download & Deploy Banner for User */}
-        <div className="bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 border border-amber-500/30 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-3 text-center sm:text-left">
-            <span className="text-2xl hidden sm:inline">📦</span>
-            <div>
-              <p className="text-xs sm:text-sm font-semibold text-stone-900 dark:text-stone-100 flex items-center justify-center sm:justify-start gap-1.5">
-                <span>इस ऐप का पूरा सोर्स कोड (.ZIP) डाउनलोड करें</span>
-                <span className="text-[10px] bg-amber-500/20 text-amber-800 dark:text-amber-300 font-mono px-2 py-0.5 rounded-full font-bold">1-Click</span>
-              </p>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400">
-                GitHub पर अपलोड करके Vercel पर 2 मिनट में अपनी खुद की परमानेंट लिंक बनाएँ।
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setIsDownloadOpen(true)}
-            className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-stone-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-transform active:scale-95 shrink-0"
-          >
-            <span>डाउनलोड कोड (ZIP)</span>
-          </button>
-        </div>
-
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
         {currentTab === 'quotes' && (
           <div className="space-y-10">
             {/* Focal Daily Affirmation */}
@@ -276,6 +303,29 @@ export default function App() {
               onOpenJournalForQuote={handleOpenJournalForQuote}
               onShuffleQuote={handleShuffleHeroQuote}
             />
+
+            {/* Community Submissions Callout */}
+            <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/25 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+              <div className="flex items-center gap-3 text-center sm:text-left">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-500 text-stone-950 font-bold text-lg shadow-sm">
+                  ✍️
+                </span>
+                <div>
+                  <h4 className="text-sm sm:text-base font-bold text-stone-900 dark:text-stone-100">
+                    क्या आपके पास भी कोई ख़ास सुविचार या शायरी है?
+                  </h4>
+                  <p className="text-xs text-stone-600 dark:text-stone-400">
+                    अपना विचार लिख कर भेजें — एडमिन (मंजेश जी) की समीक्षा के बाद यह ऐप में सबके लिए लाइव होगा!
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsSubmitQuoteOpen(true)}
+                className="w-full sm:w-auto shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 shadow transition active:scale-95 flex items-center justify-center gap-1.5"
+              >
+                <span>✍️ अपना विचार भेजें</span>
+              </button>
+            </div>
 
             {/* Categorized Affirmations Library */}
             <div className="space-y-4">
@@ -460,9 +510,20 @@ export default function App() {
         }}
       />
 
-      <DownloadProjectModal
-        isOpen={isDownloadOpen}
-        onClose={() => setIsDownloadOpen(false)}
+      <SubmitQuoteModal
+        isOpen={isSubmitQuoteOpen}
+        onClose={() => setIsSubmitQuoteOpen(false)}
+        onSubmissionSuccess={() => {
+          refreshCommunityData();
+        }}
+      />
+
+      <AdminApprovalModal
+        isOpen={isAdminApprovalOpen}
+        onClose={() => setIsAdminApprovalOpen(false)}
+        onQuotesUpdated={() => {
+          refreshCommunityData();
+        }}
       />
     </div>
   );

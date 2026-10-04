@@ -253,7 +253,13 @@ export const QuotesLibraryView: React.FC<QuotesLibraryViewProps> = ({
                   </span>
 
                   <div className="flex items-center gap-1.5">
-                    {quote.isCustom && (
+                    {quote.isCommunity && (
+                      <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span>⭐</span>
+                        <span>कम्युनिटी विचार</span>
+                      </span>
+                    )}
+                    {quote.isCustom && !quote.isCommunity && (
                       <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded">
                         {t('personal', language)}
                       </span>

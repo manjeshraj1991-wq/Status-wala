@@ -2,60 +2,68 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
-import JSZip from 'jszip';
 import { defineConfig, Plugin } from 'vite';
 
-function downloadZipPlugin(): Plugin {
+function serveMobileZipPlugin(): Plugin {
   return {
-    name: 'download-zip-plugin',
+    name: 'serve-mobile-zip',
     configureServer(server) {
-      server.middlewares.use('/api/download-zip', async (_req, res) => {
-        try {
-          const zip = new JSZip();
-          const rootDir = process.cwd();
+      server.middlewares.use((req, res, next) => {
+        const url = req.url || '';
+        if (url.startsWith('/mobile-deploy-pack.zip')) {
+          const zipPath = path.resolve(__dirname, 'public/mobile-deploy-pack.zip');
+          if (fs.existsSync(zipPath)) {
+            const stat = fs.statSync(zipPath);
+            res.writeHead(200, {
+              'Content-Type': 'application/zip',
+              'Content-Disposition': 'attachment; filename="mobile-deploy-pack.zip"',
+              'Content-Length': stat.size,
+            });
+            fs.createReadStream(zipPath).pipe(res);
+            return;
+          }
+        }
+        if (url.startsWith('/api/download-file')) {
+          const u = new URL(url, 'http://localhost');
+          const fileParam = u.searchParams.get('name') || '';
+          let targetPath = '';
+          let downloadName = fileParam;
+          let contentType = 'text/plain';
 
-          function addDirectory(dir: string) {
-            const items = fs.readdirSync(dir, { withFileTypes: true });
-            for (const item of items) {
-              if (
-                item.name === 'node_modules' ||
-                item.name === '.git' ||
-                item.name === 'dist' ||
-                item.name === 'dev-dist' ||
-                item.name === '.cache' ||
-                item.name === '.vite'
-              ) {
-                continue;
-              }
-              const fullPath = path.join(dir, item.name);
-              const relPath = path.relative(rootDir, fullPath);
-              if (item.isDirectory()) {
-                addDirectory(fullPath);
-              } else if (item.isFile()) {
-                zip.file(relPath, fs.readFileSync(fullPath));
-              }
-            }
+          if (fileParam === 'index.html') {
+            targetPath = path.resolve(__dirname, 'public/index-mobile.html');
+            contentType = 'text/html';
+          } else if (fileParam === 'main.js') {
+            targetPath = path.resolve(__dirname, 'public/main.js');
+            contentType = 'application/javascript';
+          } else if (fileParam === 'main.tsx') {
+            targetPath = path.resolve(__dirname, 'public/main.tsx');
+            contentType = 'text/plain';
+          } else if (fileParam === 'main.css') {
+            targetPath = path.resolve(__dirname, 'public/main.css');
+            contentType = 'text/css';
+          } else if (fileParam === 'logo.jpg') {
+            targetPath = path.resolve(__dirname, 'public/logo.jpg');
+            contentType = 'image/jpeg';
+            downloadName = 'status_wala_logo.jpg';
+          } else if (fileParam === 'app-icon.png' || fileParam === 'icon.png') {
+            targetPath = path.resolve(__dirname, 'public/app-icon.png');
+            contentType = 'image/png';
+            downloadName = 'status_wala_icon.png';
           }
 
-          addDirectory(rootDir);
-          const zipBuffer = await zip.generateAsync({
-            type: 'nodebuffer',
-            compression: 'DEFLATE',
-            compressionOptions: { level: 6 },
-          });
-
-          res.writeHead(200, {
-            'Content-Type': 'application/zip',
-            'Content-Disposition': 'attachment; filename="status-wala-complete-code.zip"',
-            'Content-Length': zipBuffer.length,
-            'Cache-Control': 'no-cache',
-          });
-          res.end(zipBuffer);
-        } catch (error) {
-          console.error('Error generating project ZIP:', error);
-          res.writeHead(500, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'Failed to generate project ZIP' }));
+          if (targetPath && fs.existsSync(targetPath)) {
+            const stat = fs.statSync(targetPath);
+            res.writeHead(200, {
+              'Content-Type': contentType,
+              'Content-Disposition': `attachment; filename="${downloadName}"`,
+              'Content-Length': stat.size,
+            });
+            fs.createReadStream(targetPath).pipe(res);
+            return;
+          }
         }
+        next();
       });
     },
   };
@@ -63,7 +71,7 @@ function downloadZipPlugin(): Plugin {
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), downloadZipPlugin()],
+    plugins: [react(), tailwindcss(), serveMobileZipPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
@@ -78,4 +86,5 @@ export default defineConfig(() => {
     },
   };
 });
+
 

@@ -62,9 +62,21 @@ export interface Quote {
   moodRecommendation?: MoodType[];
   context?: string;
   isCustom?: boolean;
+  isCommunity?: boolean;
   createdAt?: string;
   originalLanguage?: Language | string;
   translations?: Record<string, QuoteTranslation | undefined>;
+}
+
+export interface CommunitySubmission {
+  id: string;
+  text: string;
+  author: string;
+  category: Exclude<QuoteCategory, 'all'>;
+  submittedAt: string;
+  status: 'pending' | 'approved' | 'rejected';
+  userContact?: string;
+  approvedAt?: string;
 }
 
 export interface MovieVideoStatus {

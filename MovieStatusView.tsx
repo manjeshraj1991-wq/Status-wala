@@ -3,6 +3,7 @@ import { Language, MovieVideoStatus } from '../types';
 import { MOVIE_STATUS_LIST } from '../data/movieStatusData';
 import { SUPPORTED_LANGUAGES, t } from '../i18n/translations';
 import { audioEngine } from '../services/audioSynthesizer';
+import { loadCustomMovieStatuses } from '../services/storage';
 import {
   Play,
   Pause,
@@ -54,9 +55,16 @@ export const MovieStatusView: React.FC<MovieStatusViewProps> = ({
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  // Load custom movie statuses added via admin
+  const [customList] = useState<MovieVideoStatus[]>(() => loadCustomMovieStatuses());
+
+  const allStatuses = useMemo(() => {
+    return [...customList, ...MOVIE_STATUS_LIST];
+  }, [customList]);
+
   // Filtered statuses
   const filteredList = useMemo(() => {
-    return MOVIE_STATUS_LIST.filter((item) => {
+    return allStatuses.filter((item) => {
       if (selectedLanguage !== 'all' && item.language !== selectedLanguage) {
         return false;
       }
