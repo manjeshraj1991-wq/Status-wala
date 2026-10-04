@@ -1,0 +1,24 @@
+---------------------------------------------------
+Here are the ownership and the certification details
+of the STATUS WALA 1.0
+---------------------------------------------------
+
+app_name - 						STATUS WALA
+app_alias - 					statuswala
+app_author_name - 				My Company
+app_author_organizational - 	My Company
+app_author_organization - 		My Company
+app_author_locality - 			My Company
+app_author_state - 				Jharkhand
+app_author_country - 			India
+app_password - 					Eqbch4msfcqc
+app_versionName - 				versionName "1.0"
+app_versionCode - 				100
+
+---------------------------------------------------
+The certification was created by WebIntoApp.com at
+the Sunday 4th of October 2026 12:27:22 AM
+
+https://webintoapp.com
+---------------------------------------------------
+
